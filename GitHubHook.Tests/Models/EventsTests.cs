@@ -117,5 +117,75 @@ namespace GitHubHook.Tests.Models
             Console.WriteLine(JsonConvert.SerializeObject(projectPayload));
         }
 
+        [TestMethod]
+        public void IssuesEvent_Opened_Deserialize_ShouldSucceed()
+        {
+            // Arrange
+            var payload = resourceManager.GetString("OpenedIssuesPayload.json");
+
+            // Act
+            var issuesPayload = JsonConvert.DeserializeObject<IssuesEvent>(payload);
+
+            // Assert
+            Assert.IsNotNull(issuesPayload);
+            Console.WriteLine(JsonConvert.SerializeObject(issuesPayload));
+        }
+
+        [TestMethod]
+        public void IssuesEvent_Edited_Deserialize_ShouldSucceed()
+        {
+            // Arrange
+            var payload = resourceManager.GetString("EditedIssuesPayload.json");
+
+            // Act
+            var issuesPayload = JsonConvert.DeserializeObject<IssuesEvent>(payload);
+
+            // Assert
+            Assert.IsNotNull(issuesPayload);
+            Console.WriteLine(JsonConvert.SerializeObject(issuesPayload));
+        }
+
+        [TestMethod]
+        public void IssuesEvent_Labeled_Deserialize_ShouldSucceed()
+        {
+            // Arrange
+            var payload = resourceManager.GetString("LabeledIssuesPayload.json");
+
+            // Act
+            var issuesPayload = JsonConvert.DeserializeObject<IssuesEvent>(payload);
+
+            // Assert
+            Assert.IsNotNull(issuesPayload);
+            Console.WriteLine(JsonConvert.SerializeObject(issuesPayload));
+        }
+
+        [TestMethod]
+        public void IssuesEvent_Milestoned_Deserialize_ShouldSucceed()
+        {
+            // Arrange
+            var payload = resourceManager.GetString("MilestonedIssuesPayload.json");
+
+            // Act
+            var issuesPayload = JsonConvert.DeserializeObject<IssuesEvent>(payload);
+
+            // Assert
+            Assert.IsNotNull(issuesPayload);
+            Console.WriteLine(JsonConvert.SerializeObject(issuesPayload));
+        }
+
+        [TestMethod]
+        public void IssuesEvent_Unassigned_Deserialize_ShouldSucceed()
+        {
+            // Arrange
+            var payload = resourceManager.GetString("UnassignedIssuesPayload.json");
+
+            // Act
+            var issuesPayload = JsonConvert.DeserializeObject<IssuesEvent>(payload);
+
+            // Assert
+            Assert.IsNotNull(issuesPayload);
+            Console.WriteLine(JsonConvert.SerializeObject(issuesPayload));
+        }
+
     }
 }
