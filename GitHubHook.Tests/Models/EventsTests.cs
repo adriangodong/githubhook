@@ -61,5 +61,33 @@ namespace GitHubHook.Tests.Models
             Console.WriteLine(JsonConvert.SerializeObject(milestonePayload));
         }
 
+        [TestMethod]
+        public void LabelEvent_Create_Deserialize_ShouldSucceed()
+        {
+            // Arrange
+            var payload = resourceManager.GetString("CreateLabelPayload.json");
+
+            // Act
+            var labelPayload = JsonConvert.DeserializeObject<LabelEvent>(payload);
+
+            // Assert
+            Assert.IsNotNull(labelPayload);
+            Console.WriteLine(JsonConvert.SerializeObject(labelPayload));
+        }
+
+        [TestMethod]
+        public void LabelEvent_Update_Deserialize_ShouldSucceed()
+        {
+            // Arrange
+            var payload = resourceManager.GetString("UpdateLabelPayload.json");
+
+            // Act
+            var labelPayload = JsonConvert.DeserializeObject<LabelEvent>(payload);
+
+            // Assert
+            Assert.IsNotNull(labelPayload);
+            Console.WriteLine(JsonConvert.SerializeObject(labelPayload));
+        }
+
     }
 }
