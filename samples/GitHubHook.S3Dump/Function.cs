@@ -22,6 +22,7 @@ namespace GitHubHook.S3Dump
         {
             var eventHandlers = new EventHandlersRegistry();
             eventHandlers.RegisterEventHandler<AnyToS3Handler>("ping");
+            eventHandlers.RegisterEventHandler<AnyToS3Handler>("milestone");
 
             lambdaHandler = new LambdaHandler(
                 new Authentication(),
