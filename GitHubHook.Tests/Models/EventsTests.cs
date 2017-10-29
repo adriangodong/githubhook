@@ -33,5 +33,33 @@ namespace GitHubHook.Tests.Models
             Console.WriteLine(JsonConvert.SerializeObject(pingPayload));
         }
 
+        [TestMethod]
+        public void MilestoneEvent_Create_Deserialize_ShouldSucceed()
+        {
+            // Arrange
+            var payload = resourceManager.GetString("CreateMigrationPayload.json");
+
+            // Act
+            var milestonePayload = JsonConvert.DeserializeObject<MilestoneEvent>(payload);
+
+            // Assert
+            Assert.IsNotNull(milestonePayload);
+            Console.WriteLine(JsonConvert.SerializeObject(milestonePayload));
+        }
+
+        [TestMethod]
+        public void MilestoneEvent_Update_Deserialize_ShouldSucceed()
+        {
+            // Arrange
+            var payload = resourceManager.GetString("UpdateMigrationPayload.json");
+
+            // Act
+            var milestonePayload = JsonConvert.DeserializeObject<MilestoneEvent>(payload);
+
+            // Assert
+            Assert.IsNotNull(milestonePayload);
+            Console.WriteLine(JsonConvert.SerializeObject(milestonePayload));
+        }
+
     }
 }
