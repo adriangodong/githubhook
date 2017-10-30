@@ -49,6 +49,26 @@ namespace GitHubHook.Tests
         }
 
         [TestMethod]
+        public void RegisterWildcardEventHandler_ShouldSucceed()
+        {
+            // Act
+            eventHandlers.RegisterWildcardEventHandler<DefaultHandler>();
+
+            // Assert
+            Assert.AreEqual(1, eventHandlers.wildcardEventHandlers.Count);
+        }
+
+        [TestMethod]
+        public void RegisterWildcardEventHandler_WithInstance_ShouldSucceed()
+        {
+            // Act
+            eventHandlers.RegisterWildcardEventHandler(new DefaultHandler());
+
+            // Assert
+            Assert.AreEqual(1, eventHandlers.wildcardEventHandlers.Count);
+        }
+
+        [TestMethod]
         public void GetEventHandlersOrDefault_ShouldReturnOnlyDefaultHandler_IfEmpty()
         {
             // Act
@@ -75,6 +95,39 @@ namespace GitHubHook.Tests
             Assert.AreEqual(1, handlers.Count());
             Assert.IsFalse(handlers.First() is DefaultHandler);
             Assert.IsTrue(handlers.First() is TestHandler);
+        }
+
+        [TestMethod]
+        public void GetEventHandlersOrDefault_ShouldReturnRegisteredWildcardHandler_IfAdded()
+        {
+            // Arrange
+            var eventId = Guid.NewGuid().ToString("N");
+            eventHandlers.RegisterWildcardEventHandler<TestHandler>();
+
+            // Act
+            var handlers = eventHandlers.GetEventHandlersOrDefault(eventId);
+
+            // Assert
+            Assert.IsNotNull(handlers);
+            Assert.AreEqual(1, handlers.Count());
+            Assert.IsFalse(handlers.First() is DefaultHandler);
+            Assert.IsTrue(handlers.First() is TestHandler);
+        }
+
+        [TestMethod]
+        public void GetEventHandlersOrDefault_ShouldReturnRegisteredAndWildcardHandler_IfAdded()
+        {
+            // Arrange
+            var eventId = Guid.NewGuid().ToString("N");
+            eventHandlers.RegisterEventHandler<TestHandler>(eventId);
+            eventHandlers.RegisterWildcardEventHandler<TestHandler>();
+
+            // Act
+            var handlers = eventHandlers.GetEventHandlersOrDefault(eventId);
+
+            // Assert
+            Assert.IsNotNull(handlers);
+            Assert.AreEqual(2, handlers.Count());
         }
 
         private class TestHandler : BaseEventHandler
