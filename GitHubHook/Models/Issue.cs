@@ -10,7 +10,7 @@ namespace GitHubHook.Models
         public string Title { get; set; }
         public User User { get; set; }
         public Label[] Labels { get; set; }
-        public string State { get; set; }
+        public IssueState State { get; set; }
         public bool Locked { get; set; }
         public User Assignee { get; set; }
         public User[] Assignees { get; set; }
