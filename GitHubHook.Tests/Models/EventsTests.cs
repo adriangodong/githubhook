@@ -331,5 +331,33 @@ namespace GitHubHook.Tests.Models
             Console.WriteLine(JsonConvert.SerializeObject(pushPayload));
         }
 
+        [TestMethod]
+        public void CreateEvent_Branch_Deserialize_ShouldSucceed()
+        {
+            // Arrange
+            var payload = resourceManager.GetString("BranchCreatePayload.json");
+
+            // Act
+            var createPayload = JsonConvert.DeserializeObject<CreateEvent>(payload);
+
+            // Assert
+            Assert.IsNotNull(createPayload);
+            Console.WriteLine(JsonConvert.SerializeObject(createPayload));
+        }
+
+        [TestMethod]
+        public void CreateEvent_Tag_Deserialize_ShouldSucceed()
+        {
+            // Arrange
+            var payload = resourceManager.GetString("TagCreatePayload.json");
+
+            // Act
+            var createPayload = JsonConvert.DeserializeObject<CreateEvent>(payload);
+
+            // Assert
+            Assert.IsNotNull(createPayload);
+            Console.WriteLine(JsonConvert.SerializeObject(createPayload));
+        }
+
     }
 }
