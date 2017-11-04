@@ -20,6 +20,7 @@ namespace GitHubHook.Models
         public DateTime UpdatedAt { get; set; }
         public DateTime? ClosedAt { get; set; }
         public string AuthorAssociation { get; set; }
+        public PullRequestUrl PullRequest { get; set; }
         public string Body { get; set; }
     }
 }
