@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System.Runtime.Serialization;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
 namespace GitHubHook.Models
@@ -8,7 +9,9 @@ namespace GitHubHook.Models
     {
         Assigned,
         Unassigned,
+        [EnumMember(Value = "review_requested")]
         ReviewRequested,
+        [EnumMember(Value = "review_request_removed")]
         ReviewRequestRemoved,
         Labeled,
         Unlabeled,
