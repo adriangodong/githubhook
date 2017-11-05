@@ -1,4 +1,7 @@
-﻿namespace GitHubHook.Models
+﻿using GitHubHook.Helpers;
+using GitHubHook.Models;
+
+namespace GitHubHook.Events
 {
     [GitHubEventType("push")]
     public class PushEvent : BaseEvent

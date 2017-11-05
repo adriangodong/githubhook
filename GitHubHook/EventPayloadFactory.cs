@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using GitHubHook.Models;
+using GitHubHook.Events;
+using GitHubHook.Helpers;
 using Newtonsoft.Json;
 
 namespace GitHubHook

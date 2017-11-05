@@ -1,4 +1,7 @@
-﻿namespace GitHubHook.Models
+﻿using GitHubHook.Helpers;
+using GitHubHook.Models;
+
+namespace GitHubHook.Events
 {
     [GitHubEventType("pull_request")]
     public class PullRequestEvent : BaseEvent

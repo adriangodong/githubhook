@@ -1,9 +1,9 @@
-﻿using GitHubHook.Models;
-using GitHubHook.Tests.TestHelpers;
+﻿using GitHubHook.Tests.TestHelpers;
 using GitHubHook.Tests.TestPayloads;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using System;
+using GitHubHook.Events;
 
 namespace GitHubHook.Tests.Models
 {

@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.Core;
+using GitHubHook.Events;
 using GitHubHook.Handlers;
-using GitHubHook.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 

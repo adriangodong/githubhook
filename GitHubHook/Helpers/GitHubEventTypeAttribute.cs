@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GitHubHook.Models
+namespace GitHubHook.Helpers
 {
     [AttributeUsage(AttributeTargets.Class, Inherited = false)]
     internal class GitHubEventTypeAttribute : Attribute

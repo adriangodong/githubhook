@@ -1,4 +1,7 @@
-﻿namespace GitHubHook.Models
+﻿using GitHubHook.Helpers;
+using GitHubHook.Models;
+
+namespace GitHubHook.Events
 {
     [GitHubEventType("pull_request_review_comment")]
     public class PullRequestReviewCommentEvent : BaseEvent

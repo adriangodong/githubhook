@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.Core;
+using GitHubHook.Events;
 using GitHubHook.Models;
 
 namespace GitHubHook.Handlers

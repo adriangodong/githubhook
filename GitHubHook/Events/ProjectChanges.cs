@@ -1,4 +1,6 @@
-﻿namespace GitHubHook.Models
+﻿using GitHubHook.Helpers;
+
+namespace GitHubHook.Events
 {
     public class ProjectChanges : SnakeCaseNamedObject
     {

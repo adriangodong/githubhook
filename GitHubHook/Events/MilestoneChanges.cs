@@ -1,6 +1,7 @@
 ﻿using System;
+using GitHubHook.Helpers;
 
-namespace GitHubHook.Models
+namespace GitHubHook.Events
 {
     public class MilestoneChanges : SnakeCaseNamedObject
     {

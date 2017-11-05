@@ -1,4 +1,5 @@
 ﻿using System;
+using GitHubHook.Helpers;
 
 namespace GitHubHook.Models
 {

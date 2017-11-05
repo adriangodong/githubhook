@@ -1,4 +1,4 @@
-﻿namespace GitHubHook.Models
+﻿namespace GitHubHook.Helpers
 {
     public class Change<T> : SnakeCaseNamedObject
     {
