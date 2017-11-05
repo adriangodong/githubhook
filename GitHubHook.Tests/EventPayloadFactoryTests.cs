@@ -12,12 +12,45 @@ namespace GitHubHook.Tests
     public class EventPayloadFactoryTests
     {
 
-        [TestMethod]
-        public void RegisterEventType_ShouldRegisterAllGitHubEventTypeAttribute()
-        {
-            // Arrange
-            var eventPayloadFactory = new EventPayloadFactory();
+        private EventPayloadFactory eventPayloadFactory;
 
+        [TestInitialize]
+        public void Initialize()
+        {
+            eventPayloadFactory = new EventPayloadFactory();
+        }
+
+        [TestMethod]
+        public void RegisterEventType_ShouldRegisterEventIdOnlyIfActionNotProvided()
+        {
+            // Act
+            eventPayloadFactory.RegisterEventType(typeof(TestActionEvent).GetTypeInfo());
+
+            // Assert
+            var eventType = eventPayloadFactory.GetRegisteredEventType("test", null);
+            var unknownEventType = eventPayloadFactory.GetRegisteredEventType(
+                "test",
+                Guid.NewGuid().ToString("N"));
+            Assert.AreEqual(typeof(TestActionEvent), eventType);
+            Assert.IsNull(unknownEventType);
+        }
+
+        [TestMethod]
+        public void RegisterEventType_ShouldNotRegisterEventIdOnlyIfActionIsProvided()
+        {
+            // Act
+            eventPayloadFactory.RegisterEventType(typeof(EditedTestActionEvent).GetTypeInfo());
+
+            // Assert
+            Assert.ThrowsException<ArgumentException>(() =>
+            {
+                eventPayloadFactory.GetRegisteredEventType("test", null);
+            });
+        }
+
+        [TestMethod]
+        public void RegisterEventType_ShouldRegisterAllInstancesOfGitHubEventTypeAttribute()
+        {
             // Act
             eventPayloadFactory.RegisterEventType(typeof(EditedTestActionEvent).GetTypeInfo());
 
@@ -29,11 +62,22 @@ namespace GitHubHook.Tests
         }
 
         [TestMethod]
-        public void CreateEventPayload_KnownEventType_ShouldDeserializeToTargetType()
+        public void RegisterEventType_DuplicateKey_ShouldThrow()
         {
             // Arrange
-            var eventPayloadFactory = new EventPayloadFactory();
+            eventPayloadFactory.RegisterEventType(typeof(TestActionEvent).GetTypeInfo());
 
+            // Assert
+            Assert.ThrowsException<ArgumentException>(() =>
+            {
+                // Act
+                eventPayloadFactory.RegisterEventType(typeof(TestActionEvent).GetTypeInfo());
+            });
+        }
+
+        [TestMethod]
+        public void CreateEventPayload_KnownEventId_ShouldDeserializeToTargetType()
+        {
             // Act
             var eventPayload = eventPayloadFactory.CreateEventPayload("ping", "{}");
 
@@ -42,29 +86,25 @@ namespace GitHubHook.Tests
         }
 
         [TestMethod]
-        public void CreateEventPayload_UnknownEventType_ShouldThrow()
+        public void CreateEventPayload_UnknownEventId_ShouldThrow()
         {
             // Assert
             Assert.ThrowsException<ArgumentException>(() =>
             {
-                // Arrange
-                var eventPayloadFactory = new EventPayloadFactory();
-
                 // Act
                 eventPayloadFactory.CreateEventPayload("xxx", "{}");
             });
         }
 
         [TestMethod]
-        public void CreateEventPayload_KnownActionEventType_WithoutSpecificAction_ShouldDeserializeToTargetType()
+        public void CreateEventPayload_KnownEventId_NoAction_ShouldDeserializeToEventType()
         {
             // Arrange
-            var eventPayloadFactory = new EventPayloadFactory();
             eventPayloadFactory.RegisterEventType(typeof(TestActionEvent).GetTypeInfo());
 
             var payload = JsonConvert.SerializeObject(new TestActionEvent
             {
-                Action = TestEnum.Created
+                Action = TestAction.Created
             });
 
             // Act
@@ -75,16 +115,15 @@ namespace GitHubHook.Tests
         }
 
         [TestMethod]
-        public void CreateEventPayload_KnownActionEventType_WithSpecificAction_ShouldDeserializeToTargetType()
+        public void CreateEventPayload_KnownEventId_WithAction_ShouldDeserializeToActionEventType()
         {
             // Arrange
-            var eventPayloadFactory = new EventPayloadFactory();
             eventPayloadFactory.RegisterEventType(typeof(TestActionEvent).GetTypeInfo());
             eventPayloadFactory.RegisterEventType(typeof(EditedTestActionEvent).GetTypeInfo());
 
             var payload = JsonConvert.SerializeObject(new TestActionEvent
             {
-                Action = TestEnum.Edited
+                Action = TestAction.Edited
             });
 
             // Act
@@ -95,15 +134,14 @@ namespace GitHubHook.Tests
         }
 
         [TestMethod]
-        public void CreateEventPayload_KnownActionEventType_MultiWord_ShouldDeserializeToTargetType()
+        public void CreateEventPayload_KnownEventId_WithMultiWordAction_ShouldDeserializeToTargetType()
         {
             // Arrange
-            var eventPayloadFactory = new EventPayloadFactory();
             eventPayloadFactory.RegisterEventType(typeof(TestActionEvent).GetTypeInfo());
 
             var payload = JsonConvert.SerializeObject(new TestActionEvent
             {
-                Action = TestEnum.MultiWord
+                Action = TestAction.MultiWord
             });
 
             // Act
@@ -116,35 +154,29 @@ namespace GitHubHook.Tests
         [DataTestMethod]
         [DataRow("ping", null)]
         [DataRow(null, "{}")]
-        public void CreateEventPayload_BadInput_ShouldThrowException(string eventId, string payload)
+        public void CreateEventPayload_BadInput_ShouldThrow(string eventId, string payload)
         {
             // Assert
             Assert.ThrowsException<ArgumentNullException>(() =>
             {
-                // Arrange
-                var eventPayloadFactory = new EventPayloadFactory();
-
                 // Act
                 eventPayloadFactory.CreateEventPayload(eventId, payload);
             });
         }
 
         [TestMethod]
-        public void CreateEventPayload_BadPayload_ShouldThrowException()
+        public void CreateEventPayload_BadPayload_ShouldThrow()
         {
             // Assert
             Assert.ThrowsException<ArgumentException>(() =>
             {
-                // Arrange
-                var eventPayloadFactory = new EventPayloadFactory();
-
                 // Act
                 eventPayloadFactory.CreateEventPayload("ping", string.Empty);
             });
         }
 
         [JsonConverter(typeof(StringEnumConverter), true)]
-        private enum TestEnum
+        private enum TestAction
         {
             Created,
             Edited,
@@ -153,7 +185,7 @@ namespace GitHubHook.Tests
         }
 
         [Helpers.GitHubEventType("test")]
-        private class TestActionEvent : BaseActionEvent<TestEnum>
+        private class TestActionEvent : BaseActionEvent<TestAction>
         {
         }
 

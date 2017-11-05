@@ -29,7 +29,7 @@ namespace GitHubHook.Tests.Events
             var payload = resourceManager.GetString("EditedIssuesPayload.json");
 
             // Act
-            var issuesPayload = JsonConvert.DeserializeObject<IssuesEvent>(payload);
+            var issuesPayload = JsonConvert.DeserializeObject<IssuesEditedEvent>(payload);
 
             // Assert
             Assert.IsNotNull(issuesPayload);
@@ -43,7 +43,7 @@ namespace GitHubHook.Tests.Events
             var payload = resourceManager.GetString("LabeledIssuesPayload.json");
 
             // Act
-            var issuesPayload = JsonConvert.DeserializeObject<IssuesEvent>(payload);
+            var issuesPayload = JsonConvert.DeserializeObject<IssuesLabeledEvent>(payload);
 
             // Assert
             Assert.IsNotNull(issuesPayload);
@@ -81,13 +81,27 @@ namespace GitHubHook.Tests.Events
         }
 
         [TestMethod]
+        public void Assigned_Deserialize_ShouldSucceed()
+        {
+            // Arrange
+            var payload = resourceManager.GetString("AssignedIssuesPayload.json");
+
+            // Act
+            var issuesPayload = JsonConvert.DeserializeObject<IssuesAssignedEvent>(payload);
+
+            // Assert
+            Assert.IsNotNull(issuesPayload);
+            Console.WriteLine(JsonConvert.SerializeObject(issuesPayload));
+        }
+
+        [TestMethod]
         public void Unassigned_Deserialize_ShouldSucceed()
         {
             // Arrange
             var payload = resourceManager.GetString("UnassignedIssuesPayload.json");
 
             // Act
-            var issuesPayload = JsonConvert.DeserializeObject<IssuesEvent>(payload);
+            var issuesPayload = JsonConvert.DeserializeObject<IssuesAssignedEvent>(payload);
 
             // Assert
             Assert.IsNotNull(issuesPayload);

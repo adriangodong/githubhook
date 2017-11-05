@@ -3,8 +3,9 @@ using GitHubHook.Models;
 
 namespace GitHubHook.Events
 {
-    [GitHubEventType("label")]
-    public class LabelEvent : BaseActionEvent<LabelEventAction>
+    [GitHubEventType("issues", "labeled")]
+    [GitHubEventType("issues", "unlabeled")]
+    public class IssuesLabeledEvent : IssuesEvent
     {
         public Label Label { get; set; }
     }

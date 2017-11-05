@@ -4,9 +4,8 @@ using GitHubHook.Models;
 namespace GitHubHook.Events
 {
     [GitHubEventType("commit_comment")]
-    public class CommitCommentEvent : BaseEvent
+    public class CommitCommentEvent : BaseActionEvent<CommitCommentEventAction>
     {
-        public CommitCommentEventAction Action { get; set; }
         public CommitComment Comment { get; set; }
     }
 }

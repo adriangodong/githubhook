@@ -29,7 +29,7 @@ namespace GitHubHook.Tests.Events
             var payload = resourceManager.GetString("EditedProjectPayload.json");
 
             // Act
-            var projectPayload = JsonConvert.DeserializeObject<ProjectEvent>(payload);
+            var projectPayload = JsonConvert.DeserializeObject<ProjectEditedEvent>(payload);
 
             // Assert
             Assert.IsNotNull(projectPayload);

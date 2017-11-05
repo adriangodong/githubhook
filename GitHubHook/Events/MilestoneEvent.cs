@@ -4,10 +4,8 @@ using GitHubHook.Models;
 namespace GitHubHook.Events
 {
     [GitHubEventType("milestone")]
-    public class MilestoneEvent : BaseEvent
+    public class MilestoneEvent : BaseActionEvent<MilestoneEventAction>
     {
-        public MilestoneEventAction Action { get; set; }
         public Milestone Milestone { get; set; }
-        public MilestoneChanges Changes { get; set; }
     }
 }
