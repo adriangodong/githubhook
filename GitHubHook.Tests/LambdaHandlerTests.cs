@@ -162,7 +162,6 @@ namespace GitHubHook.Tests
             // Assert
             Assert.IsNotNull(response);
             Assert.AreEqual(200, response.StatusCode);
-            Assert.AreEqual($"{new DefaultHandler()}:{body}", response.Body);
         }
 
     }

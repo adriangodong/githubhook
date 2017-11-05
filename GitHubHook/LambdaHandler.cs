@@ -3,6 +3,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.Core;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace GitHubHook
 {
@@ -85,22 +87,26 @@ namespace GitHubHook
 
             context.Logger.Log($"DEBUG: Processing delivery {deliveryId} ({eventId})");
 
+            var deliveryResult = new DeliveryResult();
+
             var eventPayload = eventPayloadFactory.CreateEventPayload(eventId, request.Body);
+            deliveryResult.SetEventPayloadType(eventPayload.GetType());
+            context.Logger.Log($"DEBUG: Payload deserialized as {eventPayload.GetType().Name}");
+
             var handlers = eventHandlers.GetEventHandlersOrDefault(eventPayload);
 
-            var resultBuilder = new StringBuilder();
             foreach (var handler in handlers)
             {
                 var result = await handler.HandleEvent(request, context, deliveryId, eventPayload);
-                var resultString = $"{handler}:{result}";
-                resultBuilder.AppendLine(resultString);
+                var resultString = $"{handler}: {result}";
+                deliveryResult.EventHandlerResults.Add(resultString);
                 context.Logger.Log($"DEBUG: {resultString}");
             }
 
             return new APIGatewayProxyResponse
             {
                 StatusCode = 200,
-                Body = resultBuilder.ToString().TrimEnd()
+                Body = JsonConvert.SerializeObject(deliveryResult, Formatting.Indented)
             };
         }
 
