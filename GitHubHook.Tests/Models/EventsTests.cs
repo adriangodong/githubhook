@@ -359,5 +359,19 @@ namespace GitHubHook.Tests.Models
             Console.WriteLine(JsonConvert.SerializeObject(createPayload));
         }
 
+        [TestMethod]
+        public void CommitCommentEvent_Created_Deserialize_ShouldSucceed()
+        {
+            // Arrange
+            var payload = resourceManager.GetString("CreatedCommitCommentPayload.json");
+
+            // Act
+            var commitCommentPayload = JsonConvert.DeserializeObject<CommitCommentEvent>(payload);
+
+            // Assert
+            Assert.IsNotNull(commitCommentPayload);
+            Console.WriteLine(JsonConvert.SerializeObject(commitCommentPayload));
+        }
+
     }
 }
