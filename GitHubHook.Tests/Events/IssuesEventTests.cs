@@ -81,13 +81,27 @@ namespace GitHubHook.Tests.Events
         }
 
         [TestMethod]
+        public void Assigned_Deserialize_ShouldSucceed()
+        {
+            // Arrange
+            var payload = resourceManager.GetString("AssignedIssuesPayload.json");
+
+            // Act
+            var issuesPayload = JsonConvert.DeserializeObject<AssignedIssuesEvent>(payload);
+
+            // Assert
+            Assert.IsNotNull(issuesPayload);
+            Console.WriteLine(JsonConvert.SerializeObject(issuesPayload));
+        }
+
+        [TestMethod]
         public void Unassigned_Deserialize_ShouldSucceed()
         {
             // Arrange
             var payload = resourceManager.GetString("UnassignedIssuesPayload.json");
 
             // Act
-            var issuesPayload = JsonConvert.DeserializeObject<IssuesEvent>(payload);
+            var issuesPayload = JsonConvert.DeserializeObject<AssignedIssuesEvent>(payload);
 
             // Assert
             Assert.IsNotNull(issuesPayload);
