@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Text;
 using System.Threading.Tasks;
 using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.Core;
+using Newtonsoft.Json;
 
 namespace GitHubHook
 {
@@ -24,8 +24,6 @@ namespace GitHubHook
             this.authentication = authentication;
             this.eventHandlers = eventHandlers;
             this.eventPayloadFactory = eventPayloadFactory;
-
-            // TODO: do we need validation for mismatch between event handlers and payload factories?
         }
 
         public async Task<APIGatewayProxyResponse> Handle(APIGatewayProxyRequest request, ILambdaContext context)
@@ -87,22 +85,26 @@ namespace GitHubHook
 
             context.Logger.Log($"DEBUG: Processing delivery {deliveryId} ({eventId})");
 
-            var handlers = eventHandlers.GetEventHandlersOrDefault(eventId);
-            var eventPayload = eventPayloadFactory.CreateEventPayload(eventId, request.Body);
+            var deliveryResult = new DeliveryResult();
 
-            var resultBuilder = new StringBuilder();
+            var eventPayload = eventPayloadFactory.CreateEventPayload(eventId, request.Body);
+            deliveryResult.SetEventPayloadType(eventPayload.GetType());
+            context.Logger.Log($"DEBUG: Payload deserialized as {eventPayload.GetType().Name}");
+
+            var handlers = eventHandlers.GetEventHandlersOrDefault(eventPayload);
+
             foreach (var handler in handlers)
             {
                 var result = await handler.HandleEvent(request, context, deliveryId, eventPayload);
-                var resultString = $"{handler}:{result}";
-                resultBuilder.AppendLine(resultString);
+                var resultString = $"{handler}: {result}";
+                deliveryResult.EventHandlerResults.Add(resultString);
                 context.Logger.Log($"DEBUG: {resultString}");
             }
 
             return new APIGatewayProxyResponse
             {
                 StatusCode = 200,
-                Body = resultBuilder.ToString().TrimEnd()
+                Body = JsonConvert.SerializeObject(deliveryResult, Formatting.Indented)
             };
         }
 

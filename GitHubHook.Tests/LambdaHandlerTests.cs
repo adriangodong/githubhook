@@ -136,7 +136,7 @@ namespace GitHubHook.Tests
                 .Returns(authenticationResult);
 
             mockEventHandlers
-                .Setup(mock => mock.GetEventHandlersOrDefault(It.IsAny<string>()))
+                .Setup(mock => mock.GetEventHandlersOrDefault(It.IsAny<BaseEvent>()))
                 .Returns(new List<BaseEventHandler>
                 {
                     new DefaultHandler()
@@ -162,7 +162,6 @@ namespace GitHubHook.Tests
             // Assert
             Assert.IsNotNull(response);
             Assert.AreEqual(200, response.StatusCode);
-            Assert.AreEqual($"{new DefaultHandler()}:{body}", response.Body);
         }
 
     }
