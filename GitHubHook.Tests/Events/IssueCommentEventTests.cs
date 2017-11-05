@@ -45,7 +45,7 @@ namespace GitHubHook.Tests.Events
             var payload = resourceManager.GetString("EditedIssueCommentPayload.json");
 
             // Act
-            var issueCommentPayload = JsonConvert.DeserializeObject<IssueCommentEvent>(payload);
+            var issueCommentPayload = JsonConvert.DeserializeObject<EditedIssueCommentEvent>(payload);
 
             // Assert
             Assert.IsNotNull(issueCommentPayload);
