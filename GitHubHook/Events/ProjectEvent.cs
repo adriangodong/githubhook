@@ -4,9 +4,8 @@ using GitHubHook.Models;
 namespace GitHubHook.Events
 {
     [GitHubEventType("project")]
-    public class ProjectEvent : BaseEvent
+    public class ProjectEvent : BaseActionEvent<ProjectEventAction>
     {
-        public ProjectEventAction Action { get; set; }
         public Project Project { get; set; }
     }
 }

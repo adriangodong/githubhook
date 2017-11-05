@@ -4,9 +4,8 @@ using GitHubHook.Models;
 namespace GitHubHook.Events
 {
     [GitHubEventType("pull_request")]
-    public class PullRequestEvent : BaseEvent
+    public class PullRequestEvent : BaseActionEvent<PullRequestEventAction>
     {
-        public PullRequestEventAction Action { get; set; }
         public int Number { get; set; }
         public PullRequest PullRequest { get; set; }
     }
