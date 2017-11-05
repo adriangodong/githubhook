@@ -1,5 +1,5 @@
 ﻿using System;
-using GitHubHook.Models;
+using GitHubHook.Events;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace GitHubHook.Tests

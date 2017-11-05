@@ -1,4 +1,6 @@
-﻿namespace GitHubHook.Models
+﻿using GitHubHook.Helpers;
+
+namespace GitHubHook.Models
 {
     public sealed class HookConfig : SnakeCaseNamedObject
     {

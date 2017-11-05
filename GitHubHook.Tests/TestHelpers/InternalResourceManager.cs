@@ -7,8 +7,8 @@ namespace GitHubHook.Tests.TestHelpers
     internal class InternalResourceManager
     {
 
-        internal readonly Assembly assembly;
-        internal readonly string resourceNamespace;
+        private readonly Assembly assembly;
+        private readonly string resourceNamespace;
 
         public InternalResourceManager(Type rootType)
         {
