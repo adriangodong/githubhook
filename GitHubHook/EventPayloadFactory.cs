@@ -30,35 +30,72 @@ namespace GitHubHook
                 var typeInfo = type.GetTypeInfo();
 
                 if (!typeInfo.IsAbstract &&
-                    typeInfo.IsClass &&
-                    typeInfo.GetCustomAttribute<GitHubEventTypeAttribute>() != null)
+                    typeInfo.IsClass)
                 {
-                    RegisterEventType(
-                        typeInfo.GetCustomAttribute<GitHubEventTypeAttribute>().EventId,
-                        type);
+                    RegisterEventType(typeInfo);
                 }
             }
         }
 
-        public void RegisterEventType(string eventId, Type eventType)
+        internal int RegisterEventType(TypeInfo typeInfo)
         {
-            eventTypesRegistry.Add(eventId, eventType);
+            var typesRegistered = 0;
+
+            foreach (var gitHubEventTypeAttribute in typeInfo.GetCustomAttributes<GitHubEventTypeAttribute>())
+            {
+                eventTypesRegistry.Add(
+                    GetEventRegistryKey(
+                        gitHubEventTypeAttribute.EventId,
+                        gitHubEventTypeAttribute.Action),
+                    typeInfo.AsType());
+                typesRegistered++;
+            }
+
+            return typesRegistered;
+        }
+
+        public void RegisterEventType<T>(string eventId, string action)
+        {
+            eventTypesRegistry.Add(GetEventRegistryKey(eventId, action), typeof(T));
         }
 
         public BaseEvent CreateEventPayload(string eventId, string payload)
         {
-            if (!eventTypesRegistry.ContainsKey(eventId))
+            return CreateEventPayloadInternal(eventId, null, payload);
+        }
+
+        internal BaseEvent CreateEventPayloadInternal(string eventId, string action, string payload)
+        {
+            var eventRegistryKey = GetEventRegistryKey(eventId, action);
+
+            if (!eventTypesRegistry.ContainsKey(eventRegistryKey))
             {
-                throw new ArgumentException($"Unknown event type '{eventId}'");
+                if (action == null)
+                {
+                    throw new ArgumentException($"Unknown event type '{eventRegistryKey}'");
+                }
+
+                return null;
             }
 
-            var eventType = eventTypesRegistry[eventId];
+            var eventType = eventTypesRegistry[eventRegistryKey];
+
             if (JsonConvert.DeserializeObject(payload, eventType) is BaseEvent eventPayload)
             {
+                if (action == null && eventPayload is IActionEvent actionEventPayload)
+                {
+                    return CreateEventPayloadInternal(eventId, actionEventPayload.GetActionValue(), payload) ?? eventPayload;
+                }
+
                 return eventPayload;
             }
 
             throw new ArgumentException($"Can't deserialize payload to type '{eventType}'");
+        }
+
+        private string GetEventRegistryKey(string eventId, string action)
+        {
+            return action == null ? eventId : $"{eventId}:{action}";
         }
 
     }
