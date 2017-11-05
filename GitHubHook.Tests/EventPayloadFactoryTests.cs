@@ -125,7 +125,7 @@ namespace GitHubHook.Tests
                 var eventPayloadFactory = new EventPayloadFactory();
 
                 // Act
-                var eventPayload = eventPayloadFactory.CreateEventPayload(eventId, payload);
+                eventPayloadFactory.CreateEventPayload(eventId, payload);
             });
         }
 
@@ -139,7 +139,7 @@ namespace GitHubHook.Tests
                 var eventPayloadFactory = new EventPayloadFactory();
 
                 // Act
-                var eventPayload = eventPayloadFactory.CreateEventPayload("ping", string.Empty);
+                eventPayloadFactory.CreateEventPayload("ping", string.Empty);
             });
         }
 
