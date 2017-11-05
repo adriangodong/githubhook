@@ -42,35 +42,15 @@ namespace GitHubHook.Tests
         }
 
         [TestMethod]
-        public void RegisterWildcardEventHandler_ShouldSucceed()
-        {
-            // Act
-            eventHandlers.RegisterWildcardEventHandler<DefaultHandler>();
-
-            // Assert
-            Assert.AreEqual(1, eventHandlers.wildcardEventHandlers.Count);
-        }
-
-        [TestMethod]
-        public void RegisterWildcardEventHandler_WithInstance_ShouldSucceed()
-        {
-            // Act
-            eventHandlers.RegisterWildcardEventHandler(new DefaultHandler());
-
-            // Assert
-            Assert.AreEqual(1, eventHandlers.wildcardEventHandlers.Count);
-        }
-
-        [TestMethod]
         public void GetEventHandlersOrDefault_ShouldReturnOnlyDefaultHandler_IfEmpty()
         {
             // Act
-            var handlers = eventHandlers.GetEventHandlersOrDefault(new TestEvent());
+            var handlers = eventHandlers.GetEventHandlersOrDefault(new TestEvent()).ToList();
 
             // Assert
             Assert.IsNotNull(handlers);
-            Assert.AreEqual(1, handlers.Count());
-            Assert.IsTrue(handlers.First() is DefaultHandler);
+            Assert.AreEqual(1, handlers.Count);
+            Assert.IsTrue(handlers[0] is DefaultHandler);
         }
 
         [TestMethod]
@@ -80,37 +60,21 @@ namespace GitHubHook.Tests
             eventHandlers.RegisterEventHandler<TestHandler>();
 
             // Act
-            var handlers = eventHandlers.GetEventHandlersOrDefault(new TestEvent());
+            var handlers = eventHandlers.GetEventHandlersOrDefault(new TestEvent()).ToList();
 
             // Assert
             Assert.IsNotNull(handlers);
-            Assert.AreEqual(1, handlers.Count());
-            Assert.IsFalse(handlers.First() is DefaultHandler);
-            Assert.IsTrue(handlers.First() is TestHandler);
+            Assert.AreEqual(1, handlers.Count);
+            Assert.IsFalse(handlers[0] is DefaultHandler);
+            Assert.IsTrue(handlers[0] is TestHandler);
         }
 
         [TestMethod]
-        public void GetEventHandlersOrDefault_ShouldReturnRegisteredWildcardHandler_IfAdded()
-        {
-            // Arrange
-            eventHandlers.RegisterWildcardEventHandler<TestHandler>();
-
-            // Act
-            var handlers = eventHandlers.GetEventHandlersOrDefault(new TestEvent());
-
-            // Assert
-            Assert.IsNotNull(handlers);
-            Assert.AreEqual(1, handlers.Count());
-            Assert.IsFalse(handlers.First() is DefaultHandler);
-            Assert.IsTrue(handlers.First() is TestHandler);
-        }
-
-        [TestMethod]
-        public void GetEventHandlersOrDefault_ShouldReturnRegisteredAndWildcardHandler_IfAdded()
+        public void GetEventHandlersOrDefault_ShouldReturnMatchedHandlers()
         {
             // Arrange
             eventHandlers.RegisterEventHandler<TestHandler>();
-            eventHandlers.RegisterWildcardEventHandler<TestHandler>();
+            eventHandlers.RegisterEventHandler<TestEventHandler>();
 
             // Act
             var handlers = eventHandlers.GetEventHandlersOrDefault(new TestEvent());
@@ -121,21 +85,25 @@ namespace GitHubHook.Tests
         }
 
         [TestMethod]
-        public void GetEventHandlersOrDefault_ShouldReturnAllValidHandlers()
+        public void GetEventHandlersOrDefault_ShouldNotReturnMismatchedHandlers()
         {
             // Arrange
-            eventHandlers.RegisterEventHandler<TestHandler>();
-            eventHandlers.RegisterEventHandler<DerivedTestHandler>();
+            eventHandlers.RegisterEventHandler<TestEventHandler>();
 
             // Act
-            var handlers = eventHandlers.GetEventHandlersOrDefault(new TestEvent());
+            var handlers = eventHandlers.GetEventHandlersOrDefault(new AnotherTestEvent()).ToList();
 
             // Assert
             Assert.IsNotNull(handlers);
-            Assert.AreEqual(2, handlers.Count());
+            Assert.AreEqual(1, handlers.Count);
+            Assert.IsTrue(handlers[0] is DefaultHandler);
         }
 
         private class TestEvent : BaseEvent
+        {
+        }
+
+        private class AnotherTestEvent : BaseEvent
         {
         }
 
@@ -151,9 +119,12 @@ namespace GitHubHook.Tests
             }
         }
 
-        private class DerivedTestHandler : GitHubHook.Handlers.EventHandler<TestEvent>
+        private class TestEventHandler : GitHubHook.Handlers.EventHandler<TestEvent>
         {
-            public override Task<string> HandleEvent(APIGatewayProxyRequest request, ILambdaContext context, string deliveryId,
+            public override Task<string> HandleEvent(
+                APIGatewayProxyRequest request,
+                ILambdaContext context,
+                string deliveryId,
                 TestEvent eventPayload)
             {
                 throw new NotImplementedException();
