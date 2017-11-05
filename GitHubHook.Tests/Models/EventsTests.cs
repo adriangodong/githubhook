@@ -273,5 +273,175 @@ namespace GitHubHook.Tests.Models
             Console.WriteLine(JsonConvert.SerializeObject(pullRequestPayload));
         }
 
+        [TestMethod]
+        public void PullRequestEvent_Synchronize_Deserialize_ShouldSucceed()
+        {
+            // Arrange
+            var payload = resourceManager.GetString("SynchronizePullRequestPayload.json");
+
+            // Act
+            var pullRequestPayload = JsonConvert.DeserializeObject<PullRequestEvent>(payload);
+
+            // Assert
+            Assert.IsNotNull(pullRequestPayload);
+            Console.WriteLine(JsonConvert.SerializeObject(pullRequestPayload));
+        }
+
+        [TestMethod]
+        public void IssueCommentEvent_Created_Deserialize_ShouldSucceed()
+        {
+            // Arrange
+            var payload = resourceManager.GetString("CreatedIssueCommentPayload.json");
+
+            // Act
+            var issueCommentPayload = JsonConvert.DeserializeObject<IssueCommentEvent>(payload);
+
+            // Assert
+            Assert.IsNotNull(issueCommentPayload);
+            Console.WriteLine(JsonConvert.SerializeObject(issueCommentPayload));
+        }
+
+        [TestMethod]
+        public void IssueCommentEvent_PullRequestCreated_Deserialize_ShouldSucceed()
+        {
+            // Arrange
+            var payload = resourceManager.GetString("PullRequestCreatedIssueCommentPayload.json");
+
+            // Act
+            var issueCommentPayload = JsonConvert.DeserializeObject<IssueCommentEvent>(payload);
+
+            // Assert
+            Assert.IsNotNull(issueCommentPayload);
+            Assert.IsNotNull(issueCommentPayload.Issue);
+            Assert.IsNotNull(issueCommentPayload.Issue.PullRequest);
+            Console.WriteLine(JsonConvert.SerializeObject(issueCommentPayload));
+        }
+
+        [TestMethod]
+        public void IssueCommentEvent_Edited_Deserialize_ShouldSucceed()
+        {
+            // Arrange
+            var payload = resourceManager.GetString("EditedIssueCommentPayload.json");
+
+            // Act
+            var issueCommentPayload = JsonConvert.DeserializeObject<IssueCommentEvent>(payload);
+
+            // Assert
+            Assert.IsNotNull(issueCommentPayload);
+            Console.WriteLine(JsonConvert.SerializeObject(issueCommentPayload));
+        }
+
+        [TestMethod]
+        public void PushEvent_Deserialize_ShouldSucceed()
+        {
+            // Arrange
+            var payload = resourceManager.GetString("PushPayload.json");
+
+            // Act
+            var pushPayload = JsonConvert.DeserializeObject<PushEvent>(payload);
+
+            // Assert
+            Assert.IsNotNull(pushPayload);
+            Console.WriteLine(JsonConvert.SerializeObject(pushPayload));
+        }
+
+        [TestMethod]
+        public void CreateEvent_Branch_Deserialize_ShouldSucceed()
+        {
+            // Arrange
+            var payload = resourceManager.GetString("BranchCreatePayload.json");
+
+            // Act
+            var createPayload = JsonConvert.DeserializeObject<CreateEvent>(payload);
+
+            // Assert
+            Assert.IsNotNull(createPayload);
+            Console.WriteLine(JsonConvert.SerializeObject(createPayload));
+        }
+
+        [TestMethod]
+        public void CreateEvent_Tag_Deserialize_ShouldSucceed()
+        {
+            // Arrange
+            var payload = resourceManager.GetString("TagCreatePayload.json");
+
+            // Act
+            var createPayload = JsonConvert.DeserializeObject<CreateEvent>(payload);
+
+            // Assert
+            Assert.IsNotNull(createPayload);
+            Console.WriteLine(JsonConvert.SerializeObject(createPayload));
+        }
+
+        [TestMethod]
+        public void CommitCommentEvent_Created_Deserialize_ShouldSucceed()
+        {
+            // Arrange
+            var payload = resourceManager.GetString("CreatedCommitCommentPayload.json");
+
+            // Act
+            var commitCommentPayload = JsonConvert.DeserializeObject<CommitCommentEvent>(payload);
+
+            // Assert
+            Assert.IsNotNull(commitCommentPayload);
+            Console.WriteLine(JsonConvert.SerializeObject(commitCommentPayload));
+        }
+
+        [TestMethod]
+        public void DeleteEvent_Branch_Deserialize_ShouldSucceed()
+        {
+            // Arrange
+            var payload = resourceManager.GetString("BranchDeletePayload.json");
+
+            // Act
+            var deletePayload = JsonConvert.DeserializeObject<DeleteEvent>(payload);
+
+            // Assert
+            Assert.IsNotNull(deletePayload);
+            Console.WriteLine(JsonConvert.SerializeObject(deletePayload));
+        }
+
+        [TestMethod]
+        public void PullRequestReviewEvent_Submitted_Deserialize_ShouldSucceed()
+        {
+            // Arrange
+            var payload = resourceManager.GetString("SubmittedPullRequestReviewPayload.json");
+
+            // Act
+            var pullRequestReviewPayload = JsonConvert.DeserializeObject<PullRequestReviewEvent>(payload);
+
+            // Assert
+            Assert.IsNotNull(pullRequestReviewPayload);
+            Console.WriteLine(JsonConvert.SerializeObject(pullRequestReviewPayload));
+        }
+
+        [TestMethod]
+        public void PullRequestReviewEvent_Dismissed_Deserialize_ShouldSucceed()
+        {
+            // Arrange
+            var payload = resourceManager.GetString("DismissedPullRequestReviewPayload.json");
+
+            // Act
+            var pullRequestReviewPayload = JsonConvert.DeserializeObject<PullRequestReviewEvent>(payload);
+
+            // Assert
+            Assert.IsNotNull(pullRequestReviewPayload);
+            Console.WriteLine(JsonConvert.SerializeObject(pullRequestReviewPayload));
+        }
+
+        [TestMethod]
+        public void PullRequestReviewCommentEvent_Created_Deserialize_ShouldSucceed()
+        {
+            // Arrange
+            var payload = resourceManager.GetString("CreatedPullRequestReviewCommentPayload.json");
+
+            // Act
+            var pullRequestReviewCommentPayload = JsonConvert.DeserializeObject<PullRequestReviewCommentEvent>(payload);
+
+            // Assert
+            Assert.IsNotNull(pullRequestReviewCommentPayload);
+            Console.WriteLine(JsonConvert.SerializeObject(pullRequestReviewCommentPayload));
+        }
+
     }
 }

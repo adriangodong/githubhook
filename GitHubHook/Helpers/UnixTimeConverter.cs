@@ -1,0 +1,49 @@
+﻿// Forked as-is from https://raw.githubusercontent.com/egorikas/UnixTimeConverter
+// Remove this class when package is made compatible with netcoreapp1.0.
+
+using System;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+
+namespace JsonNetConverters.UnixTime
+{
+    public class UnixTimeConverter : DateTimeConverterBase
+    {
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+            if (!(value is DateTime))
+                throw new ArgumentException("Expect DateTime as input parameter");
+
+            var epoc = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+            var delta = ((DateTime)value).ToUniversalTime() - epoc;
+
+            var ticks = (long)delta.TotalSeconds;
+
+            writer.WriteValue(ticks);
+        }
+
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue,
+            JsonSerializer serializer)
+        {
+            long ticks;
+            switch (reader.TokenType)
+            {
+                case JsonToken.Integer:
+                    ticks = Convert.ToInt64(reader.Value);
+                    break;
+                case JsonToken.String:
+                    if (!long.TryParse(reader.Value.ToString(), out ticks))
+                        throw new ArgumentException($"{reader.Value} isn't a number");
+                    break;
+                default:
+                    throw new ArgumentException(
+                        $"Unexpected token. Integer or String was expected, got {reader.TokenType}");
+            }
+
+            var date = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+            date = date.AddSeconds(ticks);
+
+            return date;
+        }
+    }
+}
