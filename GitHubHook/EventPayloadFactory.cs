@@ -69,6 +69,16 @@ namespace GitHubHook
 
         internal BaseEvent CreateEventPayloadInternal(string eventId, string action, string payload)
         {
+            if (string.IsNullOrWhiteSpace(eventId))
+            {
+                throw new ArgumentNullException(nameof(eventId));
+            }
+
+            if (payload == null)
+            {
+                throw new ArgumentNullException(nameof(payload));
+            }
+
             var eventType = GetRegisteredEventType(eventId, action);
 
             if (eventType == null)

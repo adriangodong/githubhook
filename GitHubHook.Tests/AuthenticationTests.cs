@@ -42,17 +42,15 @@ namespace GitHubHook.Tests
             Assert.IsTrue(result);
         }
 
-        [Ignore("Failing on AppVeyor.")]
         [TestMethod]
         public void GenerateAndCompareSignature_TestSignature2()
         {
             // Arrange
             var resmgr = new InternalResourceManager(typeof(TestPayloadsMarker));
 
+            var secretToken = "A3UB12ga#%TMp%asL5or@Nb2%l8m1h8*vja5^Pj3xc^&%cdYcQo$WNDzfeX*HhUt^SzuDM!g5*RiEEugcb12^u@kh2pdmUtDhaFC";
+            var signature = "sha1=eb4acec0ce7e63f015dfac6681aab94b3ec028ed";
             var payload = resmgr.GetString("PingPayload.json");
-            var payloadSecurity = resmgr.GetString("PingPayloadSecurity.txt").Split(Environment.NewLine);
-            var secretToken = payloadSecurity[0];
-            var signature = payloadSecurity[1];
 
             // Act
             var result = authentication.GenerateAndCompareSignature(secretToken, signature, payload);

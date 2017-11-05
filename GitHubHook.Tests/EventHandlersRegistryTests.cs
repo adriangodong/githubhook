@@ -22,13 +22,6 @@ namespace GitHubHook.Tests
         }
 
         [TestMethod]
-        public void Ctor_ShouldNotFail()
-        {
-            // Assert
-            new EventHandlersRegistry();
-        }
-
-        [TestMethod]
         public void RegisterEventHandler_ShouldSucceed()
         {
             // Act
@@ -127,6 +120,21 @@ namespace GitHubHook.Tests
             Assert.AreEqual(2, handlers.Count());
         }
 
+        [TestMethod]
+        public void GetEventHandlersOrDefault_ShouldReturnAllValidHandlers()
+        {
+            // Arrange
+            eventHandlers.RegisterEventHandler<TestHandler>();
+            eventHandlers.RegisterEventHandler<DerivedTestHandler>();
+
+            // Act
+            var handlers = eventHandlers.GetEventHandlersOrDefault(new TestEvent());
+
+            // Assert
+            Assert.IsNotNull(handlers);
+            Assert.AreEqual(2, handlers.Count());
+        }
+
         private class TestEvent : BaseEvent
         {
         }
@@ -138,6 +146,15 @@ namespace GitHubHook.Tests
                 ILambdaContext context,
                 string deliveryId,
                 BaseEvent eventPayload)
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        private class DerivedTestHandler : GitHubHook.Handlers.EventHandler<TestEvent>
+        {
+            public override Task<string> HandleEvent(APIGatewayProxyRequest request, ILambdaContext context, string deliveryId,
+                TestEvent eventPayload)
             {
                 throw new NotImplementedException();
             }

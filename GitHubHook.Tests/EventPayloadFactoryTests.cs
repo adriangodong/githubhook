@@ -113,6 +113,36 @@ namespace GitHubHook.Tests
             Assert.IsTrue(eventPayload is TestActionEvent);
         }
 
+        [DataTestMethod]
+        [DataRow("ping", null)]
+        [DataRow(null, "{}")]
+        public void CreateEventPayload_BadInput_ShouldThrowException(string eventId, string payload)
+        {
+            // Assert
+            Assert.ThrowsException<ArgumentNullException>(() =>
+            {
+                // Arrange
+                var eventPayloadFactory = new EventPayloadFactory();
+
+                // Act
+                var eventPayload = eventPayloadFactory.CreateEventPayload(eventId, payload);
+            });
+        }
+
+        [TestMethod]
+        public void CreateEventPayload_BadPayload_ShouldThrowException()
+        {
+            // Assert
+            Assert.ThrowsException<ArgumentException>(() =>
+            {
+                // Arrange
+                var eventPayloadFactory = new EventPayloadFactory();
+
+                // Act
+                var eventPayload = eventPayloadFactory.CreateEventPayload("ping", string.Empty);
+            });
+        }
+
         [JsonConverter(typeof(StringEnumConverter), true)]
         private enum TestEnum
         {
