@@ -373,5 +373,19 @@ namespace GitHubHook.Tests.Models
             Console.WriteLine(JsonConvert.SerializeObject(commitCommentPayload));
         }
 
+        [TestMethod]
+        public void DeleteEvent_Branch_Deserialize_ShouldSucceed()
+        {
+            // Arrange
+            var payload = resourceManager.GetString("BranchDeletePayload.json");
+
+            // Act
+            var deletePayload = JsonConvert.DeserializeObject<DeleteEvent>(payload);
+
+            // Assert
+            Assert.IsNotNull(deletePayload);
+            Console.WriteLine(JsonConvert.SerializeObject(deletePayload));
+        }
+
     }
 }
