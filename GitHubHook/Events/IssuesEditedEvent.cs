@@ -2,7 +2,7 @@
 
 namespace GitHubHook.Events
 {
-    [GitHubEventType("issues", Action = "edited")]
+    [GitHubEventType("issues", "edited")]
     public class IssuesEditedEvent : IssuesEvent
     {
         public IssueChanges Changes { get; set; }
