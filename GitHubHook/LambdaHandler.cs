@@ -24,8 +24,6 @@ namespace GitHubHook
             this.authentication = authentication;
             this.eventHandlers = eventHandlers;
             this.eventPayloadFactory = eventPayloadFactory;
-
-            // TODO: do we need validation for mismatch between event handlers and payload factories?
         }
 
         public async Task<APIGatewayProxyResponse> Handle(APIGatewayProxyRequest request, ILambdaContext context)
@@ -87,8 +85,8 @@ namespace GitHubHook
 
             context.Logger.Log($"DEBUG: Processing delivery {deliveryId} ({eventId})");
 
-            var handlers = eventHandlers.GetEventHandlersOrDefault(eventId);
             var eventPayload = eventPayloadFactory.CreateEventPayload(eventId, request.Body);
+            var handlers = eventHandlers.GetEventHandlersOrDefault(eventPayload);
 
             var resultBuilder = new StringBuilder();
             foreach (var handler in handlers)

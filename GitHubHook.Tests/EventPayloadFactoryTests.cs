@@ -19,10 +19,13 @@ namespace GitHubHook.Tests
             var eventPayloadFactory = new EventPayloadFactory();
 
             // Act
-            var typesRegistered = eventPayloadFactory.RegisterEventType(typeof(EditedTestActionEvent).GetTypeInfo());
+            eventPayloadFactory.RegisterEventType(typeof(EditedTestActionEvent).GetTypeInfo());
 
             // Assert
-            Assert.AreEqual(2, typesRegistered);
+            var editedEventType = eventPayloadFactory.GetRegisteredEventType("test", "edited");
+            var updatedEventType = eventPayloadFactory.GetRegisteredEventType("test", "updated");
+            Assert.AreEqual(typeof(EditedTestActionEvent), editedEventType);
+            Assert.AreEqual(typeof(EditedTestActionEvent), updatedEventType);
         }
 
         [TestMethod]
@@ -56,9 +59,8 @@ namespace GitHubHook.Tests
         public void CreateEventPayload_KnownActionEventType_WithoutSpecificAction_ShouldDeserializeToTargetType()
         {
             // Arrange
-            var eventId = Guid.NewGuid().ToString("N");
             var eventPayloadFactory = new EventPayloadFactory();
-            eventPayloadFactory.RegisterEventType<TestActionEvent>(eventId, null);
+            eventPayloadFactory.RegisterEventType(typeof(TestActionEvent).GetTypeInfo());
 
             var payload = JsonConvert.SerializeObject(new TestActionEvent
             {
@@ -66,7 +68,7 @@ namespace GitHubHook.Tests
             });
 
             // Act
-            var eventPayload = eventPayloadFactory.CreateEventPayload(eventId, payload);
+            var eventPayload = eventPayloadFactory.CreateEventPayload("test", payload);
 
             // Assert
             Assert.IsTrue(eventPayload is TestActionEvent);
@@ -76,10 +78,9 @@ namespace GitHubHook.Tests
         public void CreateEventPayload_KnownActionEventType_WithSpecificAction_ShouldDeserializeToTargetType()
         {
             // Arrange
-            var eventId = Guid.NewGuid().ToString("N");
             var eventPayloadFactory = new EventPayloadFactory();
-            eventPayloadFactory.RegisterEventType<TestActionEvent>(eventId, null);
-            eventPayloadFactory.RegisterEventType<EditedTestActionEvent>(eventId, "edited");
+            eventPayloadFactory.RegisterEventType(typeof(TestActionEvent).GetTypeInfo());
+            eventPayloadFactory.RegisterEventType(typeof(EditedTestActionEvent).GetTypeInfo());
 
             var payload = JsonConvert.SerializeObject(new TestActionEvent
             {
@@ -87,7 +88,7 @@ namespace GitHubHook.Tests
             });
 
             // Act
-            var eventPayload = eventPayloadFactory.CreateEventPayload(eventId, payload);
+            var eventPayload = eventPayloadFactory.CreateEventPayload("test", payload);
 
             // Assert
             Assert.IsTrue(eventPayload is EditedTestActionEvent);
@@ -97,9 +98,8 @@ namespace GitHubHook.Tests
         public void CreateEventPayload_KnownActionEventType_MultiWord_ShouldDeserializeToTargetType()
         {
             // Arrange
-            var eventId = Guid.NewGuid().ToString("N");
             var eventPayloadFactory = new EventPayloadFactory();
-            eventPayloadFactory.RegisterEventType<TestActionEvent>(eventId, null);
+            eventPayloadFactory.RegisterEventType(typeof(TestActionEvent).GetTypeInfo());
 
             var payload = JsonConvert.SerializeObject(new TestActionEvent
             {
@@ -107,7 +107,7 @@ namespace GitHubHook.Tests
             });
 
             // Act
-            var eventPayload = eventPayloadFactory.CreateEventPayload(eventId, payload);
+            var eventPayload = eventPayloadFactory.CreateEventPayload("test", payload);
 
             // Assert
             Assert.IsTrue(eventPayload is TestActionEvent);
@@ -122,12 +122,13 @@ namespace GitHubHook.Tests
             MultiWord
         }
 
+        [Helpers.GitHubEventType("test")]
         private class TestActionEvent : BaseActionEvent<TestEnum>
         {
         }
 
-        [Helpers.GitHubEventType("test", "edit")]
-        [Helpers.GitHubEventType("test", "update")]
+        [Helpers.GitHubEventType("test", "edited")]
+        [Helpers.GitHubEventType("test", "updated")]
         private class EditedTestActionEvent : TestActionEvent
         {
         }

@@ -32,7 +32,7 @@ namespace GitHubHook.Tests
         public void RegisterEventHandler_ShouldSucceed()
         {
             // Act
-            eventHandlers.RegisterEventHandler<DefaultHandler>("ping");
+            eventHandlers.RegisterEventHandler<DefaultHandler>();
 
             // Assert
             Assert.AreEqual(1, eventHandlers.eventHandlers.Count);
@@ -42,7 +42,7 @@ namespace GitHubHook.Tests
         public void RegisterEventHandler_WithInstance_ShouldSucceed()
         {
             // Act
-            eventHandlers.RegisterEventHandler("ping", new DefaultHandler());
+            eventHandlers.RegisterEventHandler(new DefaultHandler());
 
             // Assert
             Assert.AreEqual(1, eventHandlers.eventHandlers.Count);
@@ -72,7 +72,7 @@ namespace GitHubHook.Tests
         public void GetEventHandlersOrDefault_ShouldReturnOnlyDefaultHandler_IfEmpty()
         {
             // Act
-            var handlers = eventHandlers.GetEventHandlersOrDefault(Guid.NewGuid().ToString("N"));
+            var handlers = eventHandlers.GetEventHandlersOrDefault(new TestEvent());
 
             // Assert
             Assert.IsNotNull(handlers);
@@ -84,11 +84,10 @@ namespace GitHubHook.Tests
         public void GetEventHandlersOrDefault_ShouldReturnRegisteredHandler_IfAdded()
         {
             // Arrange
-            var eventId = Guid.NewGuid().ToString("N");
-            eventHandlers.RegisterEventHandler<TestHandler>(eventId);
+            eventHandlers.RegisterEventHandler<TestHandler>();
 
             // Act
-            var handlers = eventHandlers.GetEventHandlersOrDefault(eventId);
+            var handlers = eventHandlers.GetEventHandlersOrDefault(new TestEvent());
 
             // Assert
             Assert.IsNotNull(handlers);
@@ -101,11 +100,10 @@ namespace GitHubHook.Tests
         public void GetEventHandlersOrDefault_ShouldReturnRegisteredWildcardHandler_IfAdded()
         {
             // Arrange
-            var eventId = Guid.NewGuid().ToString("N");
             eventHandlers.RegisterWildcardEventHandler<TestHandler>();
 
             // Act
-            var handlers = eventHandlers.GetEventHandlersOrDefault(eventId);
+            var handlers = eventHandlers.GetEventHandlersOrDefault(new TestEvent());
 
             // Assert
             Assert.IsNotNull(handlers);
@@ -118,16 +116,19 @@ namespace GitHubHook.Tests
         public void GetEventHandlersOrDefault_ShouldReturnRegisteredAndWildcardHandler_IfAdded()
         {
             // Arrange
-            var eventId = Guid.NewGuid().ToString("N");
-            eventHandlers.RegisterEventHandler<TestHandler>(eventId);
+            eventHandlers.RegisterEventHandler<TestHandler>();
             eventHandlers.RegisterWildcardEventHandler<TestHandler>();
 
             // Act
-            var handlers = eventHandlers.GetEventHandlersOrDefault(eventId);
+            var handlers = eventHandlers.GetEventHandlersOrDefault(new TestEvent());
 
             // Assert
             Assert.IsNotNull(handlers);
             Assert.AreEqual(2, handlers.Count());
+        }
+
+        private class TestEvent : BaseEvent
+        {
         }
 
         private class TestHandler : BaseEventHandler

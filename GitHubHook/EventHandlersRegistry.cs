@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using GitHubHook.Events;
 using GitHubHook.Handlers;
 
 namespace GitHubHook
@@ -6,29 +7,25 @@ namespace GitHubHook
     public class EventHandlersRegistry : IEventHandlersRegistry
     {
 
-        internal readonly Dictionary<string, List<BaseEventHandler>> eventHandlers;
+        internal readonly List<BaseEventHandler> eventHandlers;
         internal readonly List<BaseEventHandler> wildcardEventHandlers;
 
         public EventHandlersRegistry()
         {
-            eventHandlers = new Dictionary<string, List<BaseEventHandler>>();
+            eventHandlers = new List<BaseEventHandler>();
             wildcardEventHandlers = new List<BaseEventHandler>();
         }
 
-        public void RegisterEventHandler<T>(string eventId)
+        public void RegisterEventHandler<T>()
             where T : BaseEventHandler, new()
         {
-            RegisterEventHandler(eventId, new T());
+            RegisterEventHandler(new T());
         }
 
-        public void RegisterEventHandler<T>(string eventId, T handler)
+        public void RegisterEventHandler<T>(T handler)
             where T : BaseEventHandler
         {
-            if (!eventHandlers.ContainsKey(eventId))
-            {
-                eventHandlers.Add(eventId, new List<BaseEventHandler>());
-            }
-            eventHandlers[eventId].Add(handler);
+            eventHandlers.Add(handler);
         }
 
         public void RegisterWildcardEventHandler<T>()
@@ -43,19 +40,25 @@ namespace GitHubHook
             wildcardEventHandlers.Add(handler);
         }
 
-        public IEnumerable<BaseEventHandler> GetEventHandlersOrDefault(string eventId)
+        public IEnumerable<BaseEventHandler> GetEventHandlersOrDefault(BaseEvent eventPayload)
         {
-            var handlers = eventHandlers.ContainsKey(eventId) ?
-                eventHandlers[eventId] :
-                new List<BaseEventHandler>();
+            var type = eventPayload.GetType();
+            var handlers = new List<BaseEventHandler>();
 
-            if (handlers.Count + wildcardEventHandlers.Count == 0)
+            foreach (var eventHandler in eventHandlers)
+            {
+                if (eventHandler.CanHandleEvent(type))
+                {
+                    handlers.Add(eventHandler);
+                }
+                
+            }
+
+            handlers.AddRange(wildcardEventHandlers);
+
+            if (handlers.Count == 0)
             {
                 handlers.Add(new DefaultHandler());
-            }
-            else
-            {
-                handlers.AddRange(wildcardEventHandlers);
             }
 
             return handlers;

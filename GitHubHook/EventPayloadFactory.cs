@@ -37,34 +37,15 @@ namespace GitHubHook
             }
         }
 
-        internal int RegisterEventType(TypeInfo typeInfo)
+        internal void RegisterEventType(TypeInfo typeInfo)
         {
-            var typesRegistered = 0;
-
-            foreach (var gitHubEventTypeAttribute in typeInfo.GetCustomAttributes<GitHubEventTypeAttribute>())
+            foreach (var eventRegistryKey in GetEventRegistryKeys(typeInfo))
             {
-                eventTypesRegistry.Add(
-                    GetEventRegistryKey(
-                        gitHubEventTypeAttribute.EventId,
-                        gitHubEventTypeAttribute.Action),
-                    typeInfo.AsType());
-                typesRegistered++;
+                eventTypesRegistry.Add(eventRegistryKey, typeInfo.AsType());
             }
-
-            return typesRegistered;
         }
 
-        public void RegisterEventType<T>(string eventId, string action)
-        {
-            eventTypesRegistry.Add(GetEventRegistryKey(eventId, action), typeof(T));
-        }
-
-        public BaseEvent CreateEventPayload(string eventId, string payload)
-        {
-            return CreateEventPayloadInternal(eventId, null, payload);
-        }
-
-        internal BaseEvent CreateEventPayloadInternal(string eventId, string action, string payload)
+        internal Type GetRegisteredEventType(string eventId, string action)
         {
             var eventRegistryKey = GetEventRegistryKey(eventId, action);
 
@@ -78,7 +59,22 @@ namespace GitHubHook
                 return null;
             }
 
-            var eventType = eventTypesRegistry[eventRegistryKey];
+            return eventTypesRegistry[eventRegistryKey];
+        }
+
+        public BaseEvent CreateEventPayload(string eventId, string payload)
+        {
+            return CreateEventPayloadInternal(eventId, null, payload);
+        }
+
+        internal BaseEvent CreateEventPayloadInternal(string eventId, string action, string payload)
+        {
+            var eventType = GetRegisteredEventType(eventId, action);
+
+            if (eventType == null)
+            {
+                return null;
+            }
 
             if (JsonConvert.DeserializeObject(payload, eventType) is BaseEvent eventPayload)
             {
@@ -93,7 +89,22 @@ namespace GitHubHook
             throw new ArgumentException($"Can't deserialize payload to type '{eventType}'");
         }
 
-        private string GetEventRegistryKey(string eventId, string action)
+        internal static IEnumerable<string> GetEventRegistryKeys(TypeInfo typeInfo)
+        {
+            var eventRegistryKeys = new List<string>();
+
+            foreach (var gitHubEventTypeAttribute in typeInfo.GetCustomAttributes<GitHubEventTypeAttribute>())
+            {
+                eventRegistryKeys.Add(
+                    GetEventRegistryKey(
+                        gitHubEventTypeAttribute.EventId,
+                        gitHubEventTypeAttribute.Action));
+            }
+
+            return eventRegistryKeys;
+        }
+
+        internal static string GetEventRegistryKey(string eventId, string action)
         {
             return action == null ? eventId : $"{eventId}:{action}";
         }

@@ -136,7 +136,7 @@ namespace GitHubHook.Tests
                 .Returns(authenticationResult);
 
             mockEventHandlers
-                .Setup(mock => mock.GetEventHandlersOrDefault(It.IsAny<string>()))
+                .Setup(mock => mock.GetEventHandlersOrDefault(It.IsAny<BaseEvent>()))
                 .Returns(new List<BaseEventHandler>
                 {
                     new DefaultHandler()

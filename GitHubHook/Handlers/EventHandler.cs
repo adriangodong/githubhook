@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using System.Threading.Tasks;
 using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.Core;
@@ -30,6 +31,11 @@ namespace GitHubHook.Handlers
                     $"EventHandler expects payload of type '{typeof(T)}', received type '{eventPayload.GetType()}'",
                     nameof(eventPayload));
             }
+        }
+
+        public override bool CanHandleEvent(Type type)
+        {
+            return typeof(T).IsAssignableFrom(type);
         }
     }
 }
