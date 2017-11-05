@@ -401,5 +401,33 @@ namespace GitHubHook.Tests.Models
             Console.WriteLine(JsonConvert.SerializeObject(deletePayload));
         }
 
+        [TestMethod]
+        public void PullRequestReviewEvent_Submitted_Deserialize_ShouldSucceed()
+        {
+            // Arrange
+            var payload = resourceManager.GetString("SubmittedPullRequestReviewPayload.json");
+
+            // Act
+            var pullRequestReviewPayload = JsonConvert.DeserializeObject<PullRequestReviewEvent>(payload);
+
+            // Assert
+            Assert.IsNotNull(pullRequestReviewPayload);
+            Console.WriteLine(JsonConvert.SerializeObject(pullRequestReviewPayload));
+        }
+
+        [TestMethod]
+        public void PullRequestReviewEvent_Dismissed_Deserialize_ShouldSucceed()
+        {
+            // Arrange
+            var payload = resourceManager.GetString("DismissedPullRequestReviewPayload.json");
+
+            // Act
+            var pullRequestReviewPayload = JsonConvert.DeserializeObject<PullRequestReviewEvent>(payload);
+
+            // Assert
+            Assert.IsNotNull(pullRequestReviewPayload);
+            Console.WriteLine(JsonConvert.SerializeObject(pullRequestReviewPayload));
+        }
+
     }
 }
