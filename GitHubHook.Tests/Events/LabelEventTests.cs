@@ -29,7 +29,7 @@ namespace GitHubHook.Tests.Events
             var payload = resourceManager.GetString("EditedLabelPayload.json");
 
             // Act
-            var labelPayload = JsonConvert.DeserializeObject<EditedLabelEvent>(payload);
+            var labelPayload = JsonConvert.DeserializeObject<LabelEditedEvent>(payload);
 
             // Assert
             Assert.IsNotNull(labelPayload);

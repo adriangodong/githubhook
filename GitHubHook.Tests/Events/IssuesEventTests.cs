@@ -29,7 +29,7 @@ namespace GitHubHook.Tests.Events
             var payload = resourceManager.GetString("EditedIssuesPayload.json");
 
             // Act
-            var issuesPayload = JsonConvert.DeserializeObject<EditedIssuesEvent>(payload);
+            var issuesPayload = JsonConvert.DeserializeObject<IssuesEditedEvent>(payload);
 
             // Assert
             Assert.IsNotNull(issuesPayload);
@@ -43,7 +43,7 @@ namespace GitHubHook.Tests.Events
             var payload = resourceManager.GetString("LabeledIssuesPayload.json");
 
             // Act
-            var issuesPayload = JsonConvert.DeserializeObject<LabeledIssuesEvent>(payload);
+            var issuesPayload = JsonConvert.DeserializeObject<IssuesLabeledEvent>(payload);
 
             // Assert
             Assert.IsNotNull(issuesPayload);
@@ -87,7 +87,7 @@ namespace GitHubHook.Tests.Events
             var payload = resourceManager.GetString("AssignedIssuesPayload.json");
 
             // Act
-            var issuesPayload = JsonConvert.DeserializeObject<AssignedIssuesEvent>(payload);
+            var issuesPayload = JsonConvert.DeserializeObject<IssuesAssignedEvent>(payload);
 
             // Assert
             Assert.IsNotNull(issuesPayload);
@@ -101,7 +101,7 @@ namespace GitHubHook.Tests.Events
             var payload = resourceManager.GetString("UnassignedIssuesPayload.json");
 
             // Act
-            var issuesPayload = JsonConvert.DeserializeObject<AssignedIssuesEvent>(payload);
+            var issuesPayload = JsonConvert.DeserializeObject<IssuesAssignedEvent>(payload);
 
             // Assert
             Assert.IsNotNull(issuesPayload);

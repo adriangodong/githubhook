@@ -29,7 +29,7 @@ namespace GitHubHook.Tests.Events
             var payload = resourceManager.GetString("AssignedPullRequestPayload.json");
 
             // Act
-            var pullRequestPayload = JsonConvert.DeserializeObject<AssignedPullRequestEvent>(payload);
+            var pullRequestPayload = JsonConvert.DeserializeObject<PullRequestAssignedEvent>(payload);
 
             // Assert
             Assert.IsNotNull(pullRequestPayload);
@@ -43,7 +43,7 @@ namespace GitHubHook.Tests.Events
             var payload = resourceManager.GetString("UnlabeledPullRequestPayload.json");
 
         // Act
-        var pullRequestPayload = JsonConvert.DeserializeObject<LabeledPullRequestEvent>(payload);
+        var pullRequestPayload = JsonConvert.DeserializeObject<PullRequestLabeledEvent>(payload);
 
         // Assert
         Assert.IsNotNull(pullRequestPayload);
@@ -57,7 +57,7 @@ namespace GitHubHook.Tests.Events
             var payload = resourceManager.GetString("ReviewRequestedPullRequestPayload.json");
 
             // Act
-            var pullRequestPayload = JsonConvert.DeserializeObject<ReviewRequestedPullRequestEvent>(payload);
+            var pullRequestPayload = JsonConvert.DeserializeObject<PullRequestReviewRequestedEvent>(payload);
 
             // Assert
             Assert.IsNotNull(pullRequestPayload);
@@ -71,7 +71,7 @@ namespace GitHubHook.Tests.Events
             var payload = resourceManager.GetString("EditedPullRequestPayload.json");
 
             // Act
-            var pullRequestPayload = JsonConvert.DeserializeObject<EditedPullRequestEvent>(payload);
+            var pullRequestPayload = JsonConvert.DeserializeObject<PullRequestEditedEvent>(payload);
 
             // Assert
             Assert.IsNotNull(pullRequestPayload);
@@ -85,7 +85,7 @@ namespace GitHubHook.Tests.Events
             var payload = resourceManager.GetString("SynchronizePullRequestPayload.json");
 
             // Act
-            var pullRequestPayload = JsonConvert.DeserializeObject<SynchronizePullRequestEvent>(payload);
+            var pullRequestPayload = JsonConvert.DeserializeObject<PullRequestSynchronizeEvent>(payload);
 
             // Assert
             Assert.IsNotNull(pullRequestPayload);

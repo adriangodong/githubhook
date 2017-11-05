@@ -10,10 +10,4 @@ namespace GitHubHook.Events
         public Issue Issue { get; set; }
         public IssueComment Comment { get; set; }
     }
-
-    [GitHubEventType("issue_comment", "edited")]
-    public class EditedIssueCommentEvent : IssueCommentEvent
-    {
-        public IssueCommentChanges Changes { get; set; }
-    }
 }

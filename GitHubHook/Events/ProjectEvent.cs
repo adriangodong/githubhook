@@ -9,10 +9,4 @@ namespace GitHubHook.Events
         public ProjectEventAction Action { get; set; }
         public Project Project { get; set; }
     }
-
-    [GitHubEventType("project", "edited")]
-    public class EditedProjectEvent : ProjectEvent
-    {
-        public ProjectChanges Changes { get; set; }
-    }
 }

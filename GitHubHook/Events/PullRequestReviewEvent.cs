@@ -10,10 +10,4 @@ namespace GitHubHook.Events
         public PullRequestReview Review { get; set; }
         public PullRequest PullRequest { get; set; }
     }
-
-    [GitHubEventType("pull_request_review", "edited")]
-    public class EditedPullRequestReviewEvent : PullRequestReviewEvent
-    {
-        public PullRequestReviewChanges Changes { get; set; }
-    }
 }

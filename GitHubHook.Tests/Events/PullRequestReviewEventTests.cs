@@ -29,7 +29,7 @@ namespace GitHubHook.Tests.Events
             var payload = resourceManager.GetString("EditedPullRequestReviewPayload.json");
 
             // Act
-            var pullRequestReviewPayload = JsonConvert.DeserializeObject<EditedPullRequestReviewEvent>(payload);
+            var pullRequestReviewPayload = JsonConvert.DeserializeObject<PullRequestReviewEditedEvent>(payload);
 
             // Assert
             Assert.IsNotNull(pullRequestReviewPayload);
@@ -43,7 +43,7 @@ namespace GitHubHook.Tests.Events
             var payload = resourceManager.GetString("DismissedPullRequestReviewPayload.json");
 
             // Act
-            var pullRequestReviewPayload = JsonConvert.DeserializeObject<EditedPullRequestReviewEvent>(payload);
+            var pullRequestReviewPayload = JsonConvert.DeserializeObject<PullRequestReviewEditedEvent>(payload);
 
             // Assert
             Assert.IsNotNull(pullRequestReviewPayload);

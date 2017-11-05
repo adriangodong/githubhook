@@ -29,7 +29,7 @@ namespace GitHubHook.Tests.Events
             var payload = resourceManager.GetString("EditedPullRequestReviewCommentPayload.json");
 
             // Act
-            var pullRequestReviewCommentPayload = JsonConvert.DeserializeObject<EditedPullRequestReviewCommentEvent>(payload);
+            var pullRequestReviewCommentPayload = JsonConvert.DeserializeObject<PullRequestReviewCommentEditedEvent>(payload);
 
             // Assert
             Assert.IsNotNull(pullRequestReviewCommentPayload);

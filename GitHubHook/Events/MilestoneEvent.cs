@@ -9,10 +9,4 @@ namespace GitHubHook.Events
         public MilestoneEventAction Action { get; set; }
         public Milestone Milestone { get; set; }
     }
-
-    [GitHubEventType("milestone", "edited")]
-    public class EditedMilestoneEvent : MilestoneEvent
-    {
-        public MilestoneChanges Changes { get; set; }
-    }
 }

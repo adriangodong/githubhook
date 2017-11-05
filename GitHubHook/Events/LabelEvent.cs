@@ -9,10 +9,4 @@ namespace GitHubHook.Events
         public LabelEventAction Action { get; set; }
         public Label Label { get; set; }
     }
-
-    [GitHubEventType("label", "edited")]
-    public class EditedLabelEvent : LabelEvent
-    {
-        public LabelChanges Changes { get; set; }
-    }
 }
