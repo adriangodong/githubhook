@@ -18,6 +18,7 @@ namespace GitHubHook.Models
         Opened,
         Edited,
         Closed,
-        Reopened
+        Reopened,
+        Synchronize
     }
 }

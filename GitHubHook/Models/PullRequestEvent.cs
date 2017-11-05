@@ -10,5 +10,7 @@
         public User Assignee { get; set; }
         public User RequestedReviewer { get; set; }
         public Label Label { get; set; }
+        public string Before { get; set; }
+        public string After { get; set; }
     }
 }

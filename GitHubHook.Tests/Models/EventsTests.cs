@@ -274,6 +274,20 @@ namespace GitHubHook.Tests.Models
         }
 
         [TestMethod]
+        public void PullRequestEvent_Synchronize_Deserialize_ShouldSucceed()
+        {
+            // Arrange
+            var payload = resourceManager.GetString("SynchronizePullRequestPayload.json");
+
+            // Act
+            var pullRequestPayload = JsonConvert.DeserializeObject<PullRequestEvent>(payload);
+
+            // Assert
+            Assert.IsNotNull(pullRequestPayload);
+            Console.WriteLine(JsonConvert.SerializeObject(pullRequestPayload));
+        }
+
+        [TestMethod]
         public void IssueCommentEvent_Created_Deserialize_ShouldSucceed()
         {
             // Arrange
