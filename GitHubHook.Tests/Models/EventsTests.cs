@@ -34,10 +34,10 @@ namespace GitHubHook.Tests.Models
         }
 
         [TestMethod]
-        public void MilestoneEvent_Create_Deserialize_ShouldSucceed()
+        public void MilestoneEvent_Created_Deserialize_ShouldSucceed()
         {
             // Arrange
-            var payload = resourceManager.GetString("CreateMigrationPayload.json");
+            var payload = resourceManager.GetString("CreatedMigrationPayload.json");
 
             // Act
             var milestonePayload = JsonConvert.DeserializeObject<MilestoneEvent>(payload);
@@ -48,10 +48,10 @@ namespace GitHubHook.Tests.Models
         }
 
         [TestMethod]
-        public void MilestoneEvent_Update_Deserialize_ShouldSucceed()
+        public void MilestoneEvent_Edited_Deserialize_ShouldSucceed()
         {
             // Arrange
-            var payload = resourceManager.GetString("UpdateMigrationPayload.json");
+            var payload = resourceManager.GetString("EditedMilestonePayload.json");
 
             // Act
             var milestonePayload = JsonConvert.DeserializeObject<MilestoneEvent>(payload);
@@ -62,10 +62,10 @@ namespace GitHubHook.Tests.Models
         }
 
         [TestMethod]
-        public void LabelEvent_Create_Deserialize_ShouldSucceed()
+        public void LabelEvent_Created_Deserialize_ShouldSucceed()
         {
             // Arrange
-            var payload = resourceManager.GetString("CreateLabelPayload.json");
+            var payload = resourceManager.GetString("CreatedLabelPayload.json");
 
             // Act
             var labelPayload = JsonConvert.DeserializeObject<LabelEvent>(payload);
@@ -76,10 +76,10 @@ namespace GitHubHook.Tests.Models
         }
 
         [TestMethod]
-        public void LabelEvent_Update_Deserialize_ShouldSucceed()
+        public void LabelEvent_Edited_Deserialize_ShouldSucceed()
         {
             // Arrange
-            var payload = resourceManager.GetString("UpdateLabelPayload.json");
+            var payload = resourceManager.GetString("EditedLabelPayload.json");
 
             // Act
             var labelPayload = JsonConvert.DeserializeObject<LabelEvent>(payload);
@@ -90,10 +90,10 @@ namespace GitHubHook.Tests.Models
         }
 
         [TestMethod]
-        public void ProjectEvent_Create_Deserialize_ShouldSucceed()
+        public void ProjectEvent_Created_Deserialize_ShouldSucceed()
         {
             // Arrange
-            var payload = resourceManager.GetString("CreateProjectPayload.json");
+            var payload = resourceManager.GetString("CreatedProjectPayload.json");
 
             // Act
             var projectPayload = JsonConvert.DeserializeObject<ProjectEvent>(payload);
@@ -104,10 +104,10 @@ namespace GitHubHook.Tests.Models
         }
 
         [TestMethod]
-        public void ProjectEvent_Update_Deserialize_ShouldSucceed()
+        public void ProjectEvent_Edited_Deserialize_ShouldSucceed()
         {
             // Arrange
-            var payload = resourceManager.GetString("UpdateProjectPayload.json");
+            var payload = resourceManager.GetString("EditedProjectPayload.json");
 
             // Act
             var projectPayload = JsonConvert.DeserializeObject<ProjectEvent>(payload);
