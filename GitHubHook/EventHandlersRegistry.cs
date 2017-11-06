@@ -8,12 +8,10 @@ namespace GitHubHook
     {
 
         internal readonly List<BaseEventHandler> eventHandlers;
-        internal readonly List<BaseEventHandler> wildcardEventHandlers;
 
         public EventHandlersRegistry()
         {
             eventHandlers = new List<BaseEventHandler>();
-            wildcardEventHandlers = new List<BaseEventHandler>();
         }
 
         public void RegisterEventHandler<T>()
@@ -26,18 +24,6 @@ namespace GitHubHook
             where T : BaseEventHandler
         {
             eventHandlers.Add(handler);
-        }
-
-        public void RegisterWildcardEventHandler<T>()
-            where T : BaseEventHandler, new()
-        {
-            RegisterWildcardEventHandler(new T());
-        }
-
-        public void RegisterWildcardEventHandler<T>(T handler)
-            where T : BaseEventHandler
-        {
-            wildcardEventHandlers.Add(handler);
         }
 
         public IEnumerable<BaseEventHandler> GetEventHandlersOrDefault(BaseEvent eventPayload)
@@ -53,8 +39,6 @@ namespace GitHubHook
                 }
                 
             }
-
-            handlers.AddRange(wildcardEventHandlers);
 
             if (handlers.Count == 0)
             {

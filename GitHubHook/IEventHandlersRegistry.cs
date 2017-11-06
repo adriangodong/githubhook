@@ -8,8 +8,6 @@ namespace GitHubHook
     {
         void RegisterEventHandler<T>() where T : BaseEventHandler, new();
         void RegisterEventHandler<T>(T handler) where T : BaseEventHandler;
-        void RegisterWildcardEventHandler<T>() where T : BaseEventHandler, new();
-        void RegisterWildcardEventHandler<T>(T handler) where T : BaseEventHandler;
         IEnumerable<BaseEventHandler> GetEventHandlersOrDefault(BaseEvent eventPayload);
     }
 }
