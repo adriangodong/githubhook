@@ -7,5 +7,6 @@ namespace GitHubHook.Events
     {
         public Repository Repository { get; set; }
         public User Sender { get; set; }
+        public Installation Installation { get; set; }
     }
 }
