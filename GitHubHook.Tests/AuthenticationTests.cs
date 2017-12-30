@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using Amazon.Lambda.APIGatewayEvents;
-using GitHubHook.Tests.TestHelpers;
 using GitHubHook.Tests.TestPayloads;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using SilverGiggle;
 
 namespace GitHubHook.Tests
 {

@@ -1,6 +1,6 @@
-using GitHubHook.Tests.TestHelpers;
 using GitHubHook.Tests.TestPayloads;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SilverGiggle;
 
 namespace GitHubHook.Tests.Events
 {
