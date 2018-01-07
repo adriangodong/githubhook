@@ -2,10 +2,22 @@ image: Visual Studio 2017
 configuration: Release
 version: '{build}'
 
+install:
+- ps: >-
+    if ($env:APPVEYOR_REPO_TAG -eq "false")
+    {
+      $env:COMMIT_DESCRIPTION = git describe --tags
+    }
+    else
+    {
+      $env:COMMIT_DESCRIPTION = $env:APPVEYOR_REPO_TAG_NAME
+    }
+    Write-Host Build version is $env:COMMIT_DESCRIPTION
+
 dotnet_csproj:
   patch: true
   file: 'GitHubHook\GitHubHook.csproj'
-  version: $(appveyor_repo_tag_name)
+  version: $(commit_description)
 
 before_build:
 - cmd: dotnet restore
