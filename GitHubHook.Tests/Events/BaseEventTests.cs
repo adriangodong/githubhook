@@ -1,6 +1,7 @@
 using GitHubHook.Tests.TestPayloads;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SilverGiggle;
+using System.Reflection;
 
 namespace GitHubHook.Tests.Events
 {
@@ -11,7 +12,7 @@ namespace GitHubHook.Tests.Events
         [TestInitialize]
         public void Init()
         {
-            resourceManager = new InternalResourceManager(typeof(TestPayloadsMarker));
+            resourceManager = new InternalResourceManager(typeof(TestPayloadsMarker).GetTypeInfo());
         }
     }
 }

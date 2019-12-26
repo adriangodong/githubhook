@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using Amazon.Lambda.APIGatewayEvents;
 using GitHubHook.Tests.TestPayloads;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -46,7 +47,7 @@ namespace GitHubHook.Tests
         public void GenerateAndCompareSignature_TestSignature2()
         {
             // Arrange
-            var resmgr = new InternalResourceManager(typeof(TestPayloadsMarker));
+            var resmgr = new InternalResourceManager(typeof(TestPayloadsMarker).GetTypeInfo());
 
             var secretToken = "A3UB12ga#%TMp%asL5or@Nb2%l8m1h8*vja5^Pj3xc^&%cdYcQo$WNDzfeX*HhUt^SzuDM!g5*RiEEugcb12^u@kh2pdmUtDhaFC";
             var signature = "sha1=eb4acec0ce7e63f015dfac6681aab94b3ec028ed";
