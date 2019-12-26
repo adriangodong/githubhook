@@ -15,7 +15,7 @@
     <PackageReference Include="Moq" Version="4.13.1" />
     <PackageReference Include="MSTest.TestAdapter" Version="1.2.0" />
     <PackageReference Include="MSTest.TestFramework" Version="1.2.0" />
-    <PackageReference Include="SilverGiggle" Version="0.0.0-4-ge5bf59c" />
+    <PackageReference Include="SilverGiggle" Version="0.0.1" />
   </ItemGroup>
 
   <ItemGroup>
